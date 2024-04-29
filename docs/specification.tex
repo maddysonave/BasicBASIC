@@ -52,9 +52,9 @@
 
 % Edit below as instructed
 
-\title{SnappyLanguageName Language Specification} % Replace SnappyLanguageName with your project's name
+\title{Basic BASIC Language Specification} % Replace SnappyLanguageName with your project's name
 
-\author{Partner One \and Parnter Two} % Replace these with real partner names.
+\author{Maddy Wu \and Amir Estejab} % Replace these with real partner names.
 
 \begin{document}
   
@@ -62,19 +62,51 @@
 
 \subsection*{Introduction}
 
-\todo[inline]{Delete this TODO and replace with 2+ paragraphs.}
+BASIC is a programming language that was originally designed to remedy this problem. Designed by John G. Kemeny and Thomas E. Kurtz at 
+Dartmouth College in 1963 as a way to make it easy for non-STEM students to learn how to code. For our project, we aim to create an even 
+simpler version of the language that will hopefully further lower the barriers of entry to learning how to the program and really reinforce
+what we believe to be the foundations of programming. 
+
+As student's that took intro to CS at Williams, we learned how to program with Python. There were, of course, many benefits to learning 
+how to code this way. However, there were also many challenges -- especially for individuals that have never coded before or have only 
+had experience coding with languages like Scratch. One of the main challenges that we came across as students in 134, was trying to gain 
+a solid foundational understanding of the specifications in a language. Python is obviously a large language with many specifications which 
+is daunting to people that have never programmed before. 
+
+
+
 
 \subsection*{Design Principles}
 
-\todo[inline]{Delete this TODO and replace with 1+ paragraphs.}
+Basic BASIC will have even fewer specifications than BASIC. Having a small set of primitive types and limited data structures, forces the 
+user to gain a deep foundational understanding of these concepts. This way, if they choose to continue programming, they have a solid 
+understanding of the foundations and it makes it easier to continue coding using more expansive languages like Python, Java, C, and F#.
+Easier to reason about because of F#'s strong typing. 
 
 \subsection*{Examples}
 
-\todo[inline]{Delete this TODO and replace with 3+ examples and accompanying descriptions.}
+10 PRINT "Hello, World!"
+
+
+----------
+
+10 INPUT "Enter a number: ", A
+20 INPUT "Enter another number: ", B
+30 SUM = A + B
+40 PRINT "The sum of "; A; " and "; B; " is "; SUM
+
+
+—————
+
+10 INPUT "Enter a number for counting: ", N
+20 FOR I = 1 TO N
+30   IF I % 2 = 0 THEN PRINT I; " is even"
+40 NEXT I
+
 
 \subsection*{Language Concepts}
 
-\todo[inline]{Delete this TODO and replace with 1+ paragraphs.}
+Error 
 
 \subsection*{Formal Syntax}
 
