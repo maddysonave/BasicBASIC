@@ -7,8 +7,8 @@
 
   <ItemGroup>
     <Compile Include="Combinator.fs" />
+        <Compile Include="Parser.fs" />
     <Compile Include="Evaluator.fs" />
-    <Compile Include="Parser.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

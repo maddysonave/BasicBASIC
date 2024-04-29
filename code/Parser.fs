@@ -9,17 +9,22 @@ type Expr =
 // parsing a string 
 let expr, exprImpl = recparser()
 let inside = (pletter |>> fun c -> string c) <|> (pdigit |>> fun c -> string c) <|> (pws1  |>>  stringify)
-let string = 
+
+let rec stringBuilder (sl: string list): string  = 
+    match sl with
+    | [] -> ""
+    | x::xs -> x + stringBuilder xs
+
+let inside2 = pmany1 inside |>> stringBuilder 
+
+let pbstring = 
         pbetween 
             (pchar '"')
-            (pmany1 inside) 
-            (pchar '"')
+            (inside2) 
+            (pchar '"') |>> (fun s -> Bstring(s))
 
 // printing 
-let print =
-    pbetween
-        (pchar '"')
-        (pleft expr pws1)
-        (pchar '"')
+let pbprint =
+    pright (pstr "PRINT ") (expr) |>> (fun e -> Print(e))
 
-exprImpl := string <|> print
+exprImpl := pbstring <|> pbprint
