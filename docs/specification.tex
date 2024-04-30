@@ -110,20 +110,20 @@ Note: The file extensions are a work in progress
     Run ”dotnet run test2.txt” in the project file. The output should be the following:
 
     \begin{verbatim}
-    gibberish
+    "gibberish"
     \end{verbatim}
 
     \item
     example-3.bb: 
 
     \begin{verbatim}
-    "Programming is cool!"
+    "Programming is cool"
     \end{verbatim}
 
     Run ”dotnet run test3.txt” in the project file. The output should be the following:
 
     \begin{verbatim}
-    "Programming is cool!"
+    "Programming is cool"
     \end{verbatim}
 
 \end{enumerate}
@@ -149,8 +149,15 @@ possible.
 \end{verbatim}
 
 \subsection*{Semantics}
+At the moment our only primitive is a string. As we continue to build the language we will likely also incorporate numbers or integers and 
+characters. The combining forms would be PRINT, INPUT, IF ELSE, and maybe GO TO. We will also want a way to read in multiple lines from a 
+file because a program written in Basic BASIC should have multiple lines. Given that we eventually do want to implement an INPUT function, 
+our language will have the ability to read input. 
 
-\todo[inline]{Delete this TODO and replace with as much text as is needed.}
+The ultimate goal of Basic BASIC is to be able to operate the way Python might in 134. We want to be able to create very elementary programs
+that do whatever the user may want them to do. One example migh tbe if a user wants to create a mini video game using Basic BASIC. That would 
+certainly be a possibility. Another possibilty, though we might not be able to implement it quite yet, is the ability to create graphics using
+Basic BASIC while still using the same few primitives and combining forms that Basic BASIC has.
 
 % DO NOT DELETE ANYTHING BELOW THIS LINE
 \end{document}
