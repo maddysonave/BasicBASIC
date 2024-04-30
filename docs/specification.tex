@@ -62,62 +62,98 @@
 
 \subsection*{Introduction}
 
-BASIC is a programming language that was originally designed to remedy this problem. Designed by John G. Kemeny and Thomas E. Kurtz at 
-Dartmouth College in 1963 as a way to make it easy for non-STEM students to learn how to code. For our project, we aim to create an even 
-simpler version of the language that will hopefully further lower the barriers of entry to learning how to the program and really reinforce
-what we believe to be the foundations of programming. 
-
 As student's that took intro to CS at Williams, we learned how to program with Python. There were, of course, many benefits to learning 
-how to code this way. However, there were also many challenges -- especially for individuals that have never coded before or have only 
-had experience coding with languages like Scratch. One of the main challenges that we came across as students in 134, was trying to gain 
-a solid foundational understanding of the specifications in a language. Python is obviously a large language with many specifications which 
-is daunting to people that have never programmed before. 
-
-
-
+how to code this way. For example, Python syntax, at the level that we were learning it, was not difficult to learn. However, there were 
+also many challenges -- especially for individuals that have never coded before or have only had experience coding with languages like 
+Scratch. One of the main challenges that we came across as students in 134, was trying to gain a solid foundational understanding of the 
+specifications in a language. Python is obviously a large language with many specifications which is daunting to people that have never
+programmed before. \\
+\\
+BASIC is a programming language that was originally designed to remedy this problem. Designed by John G. Kemeny and Thomas E. Kurtz at 
+Dartmouth College in 1963 as a way to make it easy for non-STEM students to learn how to code. For our project, we are looking to create 
+an even simpler version of the language that will hopefully further lower the barriers of entry to learning how to the program and really 
+reinforce what we believe to be the foundations of programming. 
 
 \subsection*{Design Principles}
 
-Basic BASIC will have even fewer specifications than BASIC. Having a small set of primitive types and limited data structures, forces the 
-user to gain a deep foundational understanding of these concepts. This way, if they choose to continue programming, they have a solid 
-understanding of the foundations and it makes it easier to continue coding using more expansive languages like Python, Java, C, and F#.
-Easier to reason about because of F#'s strong typing. 
+Because Basic BASIC is meant to be accessible even to most non-technical of users, both our primitive types and our combining forms will 
+try to resemble plain English as much as possible. Furthermore, Basic BASIC will have even fewer specifications than BASIC. Having a 
+small set of primitive types and limited data structures, allows the user to gain a stronger understanding of "foundational" concepts which 
+will lend itself nicely if the user chooses to continue learning how to program. 
 
 \subsection*{Examples}
 
-PRINT "Hello World"
+Note: The file extensions are a work in progress
+
+\begin{enumerate}
+    \item
+    test1.txt:
+
+    \begin{verbatim}
+    PRINT "Hello World"
+    \end{verbatim}
+
+    Run ”dotnet run test1.txt” in the project file. The output should be the following:
+
+    \begin{verbatim}
+    "Hello World"
+    \end{verbatim} 
 
 
-----------
+    \item
+    test2.txt:
 
-PRINT "gibberish"
+    \begin{verbatim}
+    PRINT "gibberish"
+    \end{verbatim}
 
-----------
+    Run ”dotnet run test2.txt” in the project file. The output should be the following:
 
-"Programming is cool"
+    \begin{verbatim}
+    gibberish
+    \end{verbatim}
 
+    \item
+    example-3.bb: 
+
+    \begin{verbatim}
+    "Programming is cool!"
+    \end{verbatim}
+
+    Run ”dotnet run test3.txt” in the project file. The output should be the following:
+
+    \begin{verbatim}
+    "Programming is cool!"
+    \end{verbatim}
+
+\end{enumerate}
 
 \subsection*{Language Concepts}
 
-The user needs to understand strings and print statements. Strings are a primitive data type in this
-language meaning they cannot be broken down into constiuent parts. The print statment, on the other hand, is
-a combining form that acts as an 'operation' which takes a string and does something with it (in this case, prints it on screen)
+For now, the user needs only to understand strings and print statements. Strings are a primitive data type in this language meaning they 
+cannot be broken down into constiuent parts. The print statment, on the other hand, is a combining form that acts as an 'operation' which 
+takes a string and does something with it (in this case, prints it on screen). \\
+\\
+As we continue with our language, we will incorporate other elements of the language like GO TO or INPUT. Once again, the goal of Basic 
+BASIC is to be easy to learn and program with. All types be it primitives or combining forms should resemble plain English as much as 
+possible. 
 
 \subsection*{Formal Syntax}
 
+\begin{verbatim}
 <Expr>     := <Command>_<String>
            | <String>
            | \epsilon
 <Command>  := PRINT
 <String>   := ""
-        
-
-
-\todo[inline]{Delete this TODO and replace with BNF.}
+\end{verbatim}
 
 \subsection*{Semantics}
 
-\todo[inline]{Delete this TODO and replace with as much text as is needed.}
+The 1.0 specification of Basic BASIC is very limited in its scope. It gives users one primitve type (string) and one combining form (PRINT)
+that allows for printing of different strings. With the current minimally working version, all valid expressions under the BNF prints out
+the AST. The language can read in one line from a file (i.e.: "PRINT "hello world"") as input and will output the AST with the 
+prettyprint funciton as a result on the terminal.
 
 % DO NOT DELETE ANYTHING BELOW THIS LINE
 \end{document}
