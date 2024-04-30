@@ -73,9 +73,23 @@ BASIC is a programming language that was originally designed to remedy this prob
 Dartmouth College in 1963 as a way to make it easy for non-STEM students to learn how to code. For our project, we are looking to create 
 an even simpler version of the language that will hopefully further lower the barriers of entry to learning how to the program and really 
 reinforce what we believe to be the foundations of programming. 
+how to code this way. For example, Python syntax, at the level that we were learning it, was not difficult to learn. However, there were 
+also many challenges -- especially for individuals that have never coded before or have only had experience coding with languages like 
+Scratch. One of the main challenges that we came across as students in 134, was trying to gain a solid foundational understanding of the 
+specifications in a language. Python is obviously a large language with many specifications which is daunting to people that have never
+programmed before. \\
+\\
+BASIC is a programming language that was originally designed to remedy this problem. Designed by John G. Kemeny and Thomas E. Kurtz at 
+Dartmouth College in 1963 as a way to make it easy for non-STEM students to learn how to code. For our project, we are looking to create 
+an even simpler version of the language that will hopefully further lower the barriers of entry to learning how to the program and really 
+reinforce what we believe to be the foundations of programming. 
 
 \subsection*{Design Principles}
 
+Because Basic BASIC is meant to be accessible even to most non-technical of users, both our primitive types and our combining forms will 
+try to resemble plain English as much as possible. Furthermore, Basic BASIC will have even fewer specifications than BASIC. Having a 
+small set of primitive types and limited data structures, allows the user to gain a stronger understanding of "foundational" concepts which 
+will lend itself nicely if the user chooses to continue learning how to program. 
 Because Basic BASIC is meant to be accessible even to most non-technical of users, both our primitive types and our combining forms will 
 try to resemble plain English as much as possible. Furthermore, Basic BASIC will have even fewer specifications than BASIC. Having a 
 small set of primitive types and limited data structures, allows the user to gain a stronger understanding of "foundational" concepts which 
@@ -137,15 +151,24 @@ takes a string and does something with it (in this case, prints it on screen). \
 As we continue with our language, we will incorporate other elements of the language like GO TO or INPUT. Once again, the goal of Basic 
 BASIC is to be easy to learn and program with. All types be it primitives or combining forms should resemble plain English as much as 
 possible. 
+For now, the user needs only to understand strings and print statements. Strings are a primitive data type in this language meaning they 
+cannot be broken down into constiuent parts. The print statment, on the other hand, is a combining form that acts as an 'operation' which 
+takes a string and does something with it (in this case, prints it on screen). \\
+\\
+As we continue with our language, we will incorporate other elements of the language like GO TO or INPUT. Once again, the goal of Basic 
+BASIC is to be easy to learn and program with. All types be it primitives or combining forms should resemble plain English as much as 
+possible. 
 
 \subsection*{Formal Syntax}
 
+\begin{verbatim}
 \begin{verbatim}
 <Expr>     := <Command>_<String>
            | <String>
            | \epsilon
 <Command>  := PRINT
 <String>   := ""
+\end{verbatim}
 \end{verbatim}
 
 \subsection*{Semantics}
