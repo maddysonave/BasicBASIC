@@ -85,7 +85,7 @@ Easier to reason about because of F#'s strong typing.
 
 \subsection*{Examples}
 
-PRINT "Hello, World!"
+PRINT "Hello World"
 
 
 ----------
@@ -94,14 +94,24 @@ PRINT "gibberish"
 
 ----------
 
-"Programming is cool!"
+"Programming is cool"
 
 
 \subsection*{Language Concepts}
 
-The user needs to understand 
+The user needs to understand strings and print statements. Strings are a primitive data type in this
+language meaning they cannot be broken down into constiuent parts. The print statment, on the other hand, is
+a combining form that acts as an 'operation' which takes a string and does something with it (in this case, prints it on screen)
 
 \subsection*{Formal Syntax}
+
+<Expr>     := <Command>_<String>
+           | <String>
+           | \epsilon
+<Command>  := PRINT
+<String>   := ""
+        
+
 
 \todo[inline]{Delete this TODO and replace with BNF.}
 
