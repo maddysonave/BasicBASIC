@@ -126,6 +126,72 @@ Note: The file extensions are a work in progress
     "Programming is cool"
     \end{verbatim}
 
+    \item
+    test4.txt:
+
+    \begin{verbatim}
+    10 REM TI-STEM
+    20 CALL CLEAR
+    30 RANDOMIZE
+    40 B=0
+    50 R$=" "
+    60 PRINT "Do you want to play with"
+    70 PRINT "1:letters?"
+    80 PRINT "2:numbers?"
+    90 PRINT "3:0 an 1 only?"
+    100 PRINT "4:or do you want to stop?"
+    110 CALL KEY (5,K,S)
+    120 IF S = 0 THEN 110
+    130 IF K > 57 THEN 110 
+    140 IF K < 48 THEN 110
+    150 K=K-48 
+    160 ON K GOSUB 420,450,480,510
+    170 INPUT "Difficulty? (1-6)":DIF
+    180 REM  DISPLAY************
+    190 B=B+1
+    200 R$=" "
+    210 CALL CLEAR 
+    220 FOR CC1=1 TO B
+    230 A=INT(RND*NR)+W
+    240 CALL HCHAR(12,16,A)
+    250 R$=R$&CHR$(A)
+    260 FOR CC2=1 TO 100/DIF
+    270 NEXT CC2
+    280 CALL HCHAR(12,16,31)
+    290 FOR CC2=1 TO 100/DIF
+    300 NEXT CC2
+    310 NEXT CC1
+    320 REM INPUT ANSWER *******
+    330 INPUT "ANSWER: ":AN$
+    340 IF AN$=R$ THEN 190
+    350 PRINT "WRONG"
+    360 PRINT "YOUR SCORE IS:";B-1
+    370 PRINT "THE ANSWER IS:";R$
+    380 PRINT "PRESS ANY KEY"
+    390 CALL KEY (5,K,S)
+    400 IF S=0 THEN 390
+    410 GOTO 20
+    420 NR=26
+    430 W=65
+    440 RETURN
+    450 NR=10
+    460 W=48
+    470 RETURN 
+    480 NR=2
+    490 W=48
+    500 RETURN
+    510 PRINT "End of this game"
+    520 END
+    \end{verbatim}
+
+    Run ”dotnet run test1.txt” in the project file. The output should be the following:
+
+    \begin{verbatim}
+    "Hello World"
+    \end{verbatim} 
+
+
+    \item
 \end{enumerate}
 
 \subsection*{Language Concepts}
