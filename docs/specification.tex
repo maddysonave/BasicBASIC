@@ -82,57 +82,118 @@ small set of primitive types and limited data structures, allows the user to gai
 will lend itself nicely if the user chooses to continue learning how to program. 
 
 \subsection*{Examples}
-
-Note: The file extensions are a work in progress
-
 \begin{enumerate}
+   
     \item
-    test1.txt:
+    test1.bbas:
 
     \begin{verbatim}
-    PRINT "Hello World"
+    10 PRINT 2^3 
     \end{verbatim}
 
-    Run ”dotnet run test1.txt” in the project file. The output should be the following:
+    Run ”dotnet run test1.bbas” in the project file. The output should be the following:
 
     \begin{verbatim}
-    "Hello World"
+    8
+    \end{verbatim}
+
+    \item
+    test-2.bbas: 
+
+    \begin{verbatim}
+    10 INPUT "Enter the first number: ", num1
+    20 INPUT "Enter the second number: ", num2
+    30 PRINT "The sum is: "; num1 + num2
+    \end{verbatim}
+
+    Run ”dotnet run test2.bbas” in the project file. The user will then be prompted twice for a number. 
+    Once the user inputs both numbers, say the user inputs 10 and 20, the output should be:\\
+
+    \begin{verbatim}
+    "The sum is: 30"
+    \end{verbatim}
+
+    \item
+    STM.bbas:
+
+    \begin{verbatim}
+    10  REM TI-STEM
+    20  CALL CLEAR
+    30  RANDOMIZE
+    40  B=0
+    50  R$=" "
+    60  PRINT "Do you want to play with"
+    70  PRINT "1:letters?"
+    80  PRINT "2:numbers?"
+    90  PRINT "3:0 an 1 only?"
+    100 PRINT "4:or do you want to stop?"
+    110 CALL KEY (5,K,S)
+    120 IF S = 0 THEN 110
+    130 IF K > 57 THEN 110 
+    140 IF K < 48 THEN 110
+    150 K=K-48 
+    160 ON K GOSUB 420,450,480,510
+    170 INPUT "Difficulty? (1-6)":DIF
+    180 REM  DISPLAY************
+    190 B=B+1
+    200 R$=" "
+    210 CALL CLEAR 
+    220 FOR CC1=1 TO B
+    230 A=INT(RND*NR)+W
+    240 CALL HCHAR(12,16,A)
+    250 R$=R$&CHR$(A)
+    260 FOR CC2=1 TO 100/DIF
+    270 NEXT CC2
+    280 CALL HCHAR(12,16,31)
+    290 FOR CC2=1 TO 100/DIF
+    300 NEXT CC2
+    310 NEXT CC1
+    320 REM INPUT ANSWER *******
+    330 INPUT "ANSWER: ":AN$
+    340 IF AN$=R$ THEN 190
+    350 PRINT "WRONG"
+    360 PRINT "YOUR SCORE IS:";B-1
+    370 PRINT "THE ANSWER IS:";R$
+    380 PRINT "PRESS ANY KEY"
+    390 CALL KEY (5,K,S)
+    400 IF S=0 THEN 390
+    410 GOTO 20
+    420 NR=26
+    430 W=65
+    440 RETURN
+    450 NR=10
+    460 W=48
+    470 RETURN 
+    480 NR=2
+    490 W=48
+    500 RETURN
+    510 PRINT "End of this game"
+    520 END
+    \end{verbatim}
+
+    Run ”dotnet run STM.bbas” in the project file. The output should be the following:
+
+    \begin{verbatim}
+    DO YOU WANT TO PLAY WITH
+    1. LETTERS?
+    2. NUMBERS?
+    3. 0 OR 1 ONLY?
+    4. OR DO YOU WANT TO STOP?
     \end{verbatim} 
 
+    How STM works: \\
 
-    \item
-    test2.txt:
-
-    \begin{verbatim}
-    PRINT "gibberish"
-    \end{verbatim}
-
-    Run ”dotnet run test2.txt” in the project file. The output should be the following:
-
-    \begin{verbatim}
-    "gibberish"
-    \end{verbatim}
-
-    \item
-    example-3.bb: 
-
-    \begin{verbatim}
-    "Programming is cool"
-    \end{verbatim}
-
-    Run ”dotnet run test3.txt” in the project file. The output should be the following:
-
-    \begin{verbatim}
-    "Programming is cool"
-    \end{verbatim}
-
+    Now you make your choice by entering 1, 2, 3, or 4 and also choose a level of difficulty. Say you entered 1 to play with letters. 
+    A letter will now appear on the screen but only for a very short time. You have to enter that letter. The computer will then show
+    you two letters which you have to enter, then three, and so on. Obviously, as the number of letters increases, remembering them 
+    all becomes more difficult. What is the longest string of characters you can remember? 
 \end{enumerate}
 
 \subsection*{Language Concepts}
 
-For now, the user needs only to understand strings and print statements. Strings are a primitive data type in this language meaning they 
-cannot be broken down into constiuent parts. The print statment, on the other hand, is a combining form that acts as an 'operation' which 
-takes a string and does something with it (in this case, prints it on screen). \\
+In order to use BASIC Basic the user should have an understanding of basic $($haha$)$ math operations.They also need to have some an 
+understanding of strings and print statements. Strings are a primitive data type in this language meaning they cannot be broken down 
+into constiuent parts. The print statment as well as the arithmetic operators, on the other hand, are combining forms. \\
 \\
 As we continue with our language, we will incorporate other elements of the language like GO TO or INPUT. Once again, the goal of Basic 
 BASIC is to be easy to learn and program with. All types be it primitives or combining forms should resemble plain English as much as 
@@ -141,28 +202,73 @@ possible.
 \subsection*{Formal Syntax}
 
 \begin{verbatim}
-<Expr>     := <Command>_<String>
-           | <String>
-           | \epsilon
+<Expr>     := <Command>_<String> | <String> | <Num> |
+              (<Expr> + <Expr>) | (<Expr> - <Expr>) | 
+              (<Expr> * <Expr>) | (<Expr> / <Expr>) | 
+              (<Expr> ^ <Expr>) | \epsilon | <Paren>
 <Command>  := PRINT
 <String>   := ""
+<Num>      := n\in\Z
 \end{verbatim}
 
 \subsection*{Semantics}
-The 1.0 specification of Basic BASIC is very limited in its scope. It gives users one primitive type (string) and one combining form (PRINT)
-that allows for printing of different strings. With the current minimally working version, all valid expressions under the BNF prints out
-the AST. The language can read in one line from a file (i.e.: "PRINT "hello world"") as input and will output the AST with the 
-prettyprint function as a result on the terminal.\\
-\\
-As we continue to build the language we will likely also incorporate numbers or integers and 
-characters. The combining forms would be PRINT, INPUT, IF ELSE, and maybe GO TO. We will also want a way to read in multiple lines from a 
-file because a program written in Basic BASIC should have multiple lines. Given that we eventually do want to implement an INPUT function, 
-our language will have the ability to read input. \\
-\\
-The ultimate goal of Basic BASIC is to be able to operate the way Python might in 134. We want to be able to create very elementary programs
-that do whatever the user may want them to do. One example migh tbe if a user wants to create a mini video game using Basic BASIC. That would 
-certainly be a possibility. Another possibilty, though we might not be able to implement it quite yet, is the ability to create graphics using
-Basic BASIC while still using the same few primitives and combining forms that Basic BASIC has.
+
+    \begin{tabular}{ |p{3cm}|p{3cm}|p{3cm}|p{3cm}|p{3cm}|  }
+    \hline
+    \multicolumn{5}{|c|}{Semantics} \\
+    \hline
+    Syntax& Abstract Syntax& Type& Prec./Assoc.& Meaning \\
+    \hline
+    "Hello World" &Bstring of string &string &n/a & A sequence of characters enclosed in double quotes ("). It is a primitive \\
+    \hline
+    n &Num of int &int &n/a &N is any positive or negative integer. It is a primitive. \\
+    \hline
+    + &Plus of Expr * Expr &char &left-associative & Adds the value of the left expression to the value of the right expression.\\
+    \hline
+    \end{tabular}
+
+
+\begin{enumerate}
+    \item
+    What are the primitive kinds of values in your system? For example, a primitive might be a number, 
+    a string, a shape, or a sound. Every primitive should be an idea that a user can explicitly state 
+    in a program written in your language. 
+    \begin{enumerate}
+        \item
+        The primitives that we currently have are strings and numbers.
+    \end{enumerate} 
+    \item 
+    What are the combining forms in your language? In other words, how are values combined in
+    a program? For example, your system might combine primitive “numbers” using an operation
+    like “plus.” Or perhaps a user can arrange primitive “notes” within a “sequence.”
+    \begin{enumerate}
+        \item 
+        The combining forms we have are your typical arithmetic operators like addition, subtratction,
+         * multiplication, division, and exponentiation.
+    \end{enumerate} 
+    \item 
+    How is your program evaluated? In particular
+    \begin{enumerate}
+        \item 
+        Do programs in your language read any input?
+        \begin{enumerate}
+            \item
+            Our language does take in user input. Our language is a way to simplify programming, 
+            so users will be programming using our language.
+        \end{enumerate}
+        \item
+        What is the effect (output) of evaluating a program? Does the language produce a file or
+        print something to the screen? Use one of your example programs to illustrate what you
+        expect as output.
+        \begin{enumerate}
+            \item
+            Depending on the program that the user writes, Basic BASIC should be able to interpret any
+            program written in the language and output what the user is hoping to output. The most 
+            complex example we have provided is a game called STM which should generate a playable game. 
+        \end{enumerate}
+    \end{enumerate}
+\end{enumerate}
+
 
 % DO NOT DELETE ANYTHING BELOW THIS LINE
 \end{document}
