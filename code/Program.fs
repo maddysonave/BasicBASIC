@@ -17,6 +17,6 @@ let main args =
         let input = file[0]
         let asto = parse input
         match asto with
-        | Some ast -> evaluate ast |> ignore
+        | Some ast -> evaluate ast|> ignore
         | None -> printfn "Invalid program."
         0
