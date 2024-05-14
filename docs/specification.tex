@@ -77,9 +77,9 @@ reinforce what we believe to be the foundations of programming.
 \subsection*{Design Principles}
 
 Because Basic BASIC is meant to be accessible even to most non-technical of users, both our primitive types and our combining forms will 
-try to resemble plain English as much as possible. Furthermore, Basic BASIC will have even fewer specifications than BASIC. Having a 
-small set of primitive types and limited data structures, allows the user to gain a stronger understanding of "foundational" concepts which 
-will lend itself nicely if the user chooses to continue learning how to program. 
+try to resemble plain English as much as possible. Furthermore, Basic BASIC will have even fewer specifications than BASIC which will 
+hopefully be conducive to ease of learning and a stronger understanding of "foundational" concepts. If the user chooses to continue 
+programming. BASIC Basic will lend itself nicely to other more complex languages. 
 
 \subsection*{Examples}
 \begin{enumerate}
@@ -88,7 +88,7 @@ will lend itself nicely if the user chooses to continue learning how to program.
     test1.bbas:
 
     \begin{verbatim}
-    10 PRINT 2^3 
+    PRINT 2^3 
     \end{verbatim}
 
     Run ”dotnet run test1.bbas” in the project file. The output should be the following:
@@ -98,95 +98,41 @@ will lend itself nicely if the user chooses to continue learning how to program.
     \end{verbatim}
 
     \item
-    test-2.bbas: 
-
-    \begin{verbatim}
-    10 INPUT "Enter the first number: ", num1
-    20 INPUT "Enter the second number: ", num2
-    30 PRINT "The sum is: "; num1 + num2
+    test-2.bbas: Factorial without INPUT
+    
+    \begin{verbatim}    
+    LET num = 5
+    LET factorial = 1
+    FOR i = 1 TO num
+        LET factorial = factorial * i
+    NEXT i
+    PRINT "The factorial of "; num; " is: "; factorial  
     \end{verbatim}
 
-    Run ”dotnet run test2.bbas” in the project file. The user will then be prompted twice for a number. 
-    Once the user inputs both numbers, say the user inputs 10 and 20, the output should be:\\
+    Run ”dotnet run test2.bbas” in the project file. \\
 
     \begin{verbatim}
-    "The sum is: 30"
+    "The factorial of 5 is 120"
     \end{verbatim}
 
     \item
-    STM.bbas:
+    test-3.bbas: Factorial with INPUT
 
-    \begin{verbatim}
-    10  REM TI-STEM
-    20  CALL CLEAR
-    30  RANDOMIZE
-    40  B=0
-    50  R$=" "
-    60  PRINT "Do you want to play with"
-    70  PRINT "1:letters?"
-    80  PRINT "2:numbers?"
-    90  PRINT "3:0 an 1 only?"
-    100 PRINT "4:or do you want to stop?"
-    110 CALL KEY (5,K,S)
-    120 IF S = 0 THEN 110
-    130 IF K > 57 THEN 110 
-    140 IF K < 48 THEN 110
-    150 K=K-48 
-    160 ON K GOSUB 420,450,480,510
-    170 INPUT "Difficulty? (1-6)":DIF
-    180 REM  DISPLAY************
-    190 B=B+1
-    200 R$=" "
-    210 CALL CLEAR 
-    220 FOR CC1=1 TO B
-    230 A=INT(RND*NR)+W
-    240 CALL HCHAR(12,16,A)
-    250 R$=R$&CHR$(A)
-    260 FOR CC2=1 TO 100/DIF
-    270 NEXT CC2
-    280 CALL HCHAR(12,16,31)
-    290 FOR CC2=1 TO 100/DIF
-    300 NEXT CC2
-    310 NEXT CC1
-    320 REM INPUT ANSWER *******
-    330 INPUT "ANSWER: ":AN$
-    340 IF AN$=R$ THEN 190
-    350 PRINT "WRONG"
-    360 PRINT "YOUR SCORE IS:";B-1
-    370 PRINT "THE ANSWER IS:";R$
-    380 PRINT "PRESS ANY KEY"
-    390 CALL KEY (5,K,S)
-    400 IF S=0 THEN 390
-    410 GOTO 20
-    420 NR=26
-    430 W=65
-    440 RETURN
-    450 NR=10
-    460 W=48
-    470 RETURN 
-    480 NR=2
-    490 W=48
-    500 RETURN
-    510 PRINT "End of this game"
-    520 END
+    \begin{verbatim}    
+    INPUT "Enter a number: ", num
+    LET factorial = 1
+    FOR i = 1 TO num
+        LET factorial = factorial * i
+    NEXT i
+    PRINT "The factorial of "; num; " is: "; factorial
     \end{verbatim}
 
-    Run ”dotnet run STM.bbas” in the project file. The output should be the following:
+    Run ”dotnet run test3.bbas” in the project file. The user will then be prompted for a number. \\
+    In this case assume they inputed 5 \\
 
     \begin{verbatim}
-    DO YOU WANT TO PLAY WITH
-    1. LETTERS?
-    2. NUMBERS?
-    3. 0 OR 1 ONLY?
-    4. OR DO YOU WANT TO STOP?
-    \end{verbatim} 
-
-    How STM works: \\
-
-    Now you make your choice by entering 1, 2, 3, or 4 and also choose a level of difficulty. Say you entered 1 to play with letters. 
-    A letter will now appear on the screen but only for a very short time. You have to enter that letter. The computer will then show
-    you two letters which you have to enter, then three, and so on. Obviously, as the number of letters increases, remembering them 
-    all becomes more difficult. What is the longest string of characters you can remember? 
+    "The factorial of 5 is 120"
+    \end{verbatim}
 \end{enumerate}
 
 \subsection*{Language Concepts}
@@ -195,9 +141,9 @@ In order to use BASIC Basic the user should have an understanding of basic $($ha
 understanding of strings and print statements. Strings are a primitive data type in this language meaning they cannot be broken down 
 into constiuent parts. The print statment as well as the arithmetic operators, on the other hand, are combining forms. \\
 \\
-As we continue with our language, we will incorporate other elements of the language like GO TO or INPUT. Once again, the goal of Basic 
-BASIC is to be easy to learn and program with. All types be it primitives or combining forms should resemble plain English as much as 
-possible. 
+For this our rendition of Basic, we are opting to not use GO TO statements as this is is generally regarded as bad coding practicing. 
+However, as we proceed with BASIC Basic we we will incorporate loops and conditionals. Once again, the goal of Basic BASIC is to be 
+easy to learn and program with. All types be it primitives or combining forms should resemble plain English as much as possible. 
 
 \subsection*{Formal Syntax}
 
@@ -225,8 +171,18 @@ possible.
     \hline
     + &Plus of Expr * Expr &char &left-associative & Adds the value of the left expression to the value of the right expression.\\
     \hline
+    - &Minus of Expr * Expr &char &left-associative & Subtracts the value of the right expression from the value of the left expression.\\
+    \hline
+    * &Times of Expr * Expr &char &left-associative & Multiplies the value of the left expression to the value of the right expression.\\
+    \hline
+    / &Divide of Expr * Expr &char &left-associative & Divides the value of the left expression by the value of the right expression.\\
+    \hline
+    \^\ &Exp of Expr * Expr &char &right-associative & Raises the value of the left expression to the value of the right expression.\\
+    \hline
+    $()$ &Parens of Expr &char &n/a & parentheses\\
+    \hline
     \end{tabular}
-
+\\
 
 \begin{enumerate}
     \item
