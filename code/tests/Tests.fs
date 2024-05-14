@@ -12,11 +12,14 @@ type TestClass () =
 
     [<TestMethod>]
       member this.TestAddition() =
-        let a = 2
-        let b = 3
+        let result = parse "2 + 3"
         let expected = 5
+        match result with
+        | Some (Num (n)) -> Assert.AreEqual(expected, n)
+        | _ -> Assert.Fail("Parsing failed or returned wrong type")
+        
 
-        let actual = a + b
+        //let actual = result + expected
 
-        Assert.AreEqual(expected, actual)
+        //Assert.AreEqual(expected, actual)
         

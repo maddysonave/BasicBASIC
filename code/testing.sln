@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "code", "code\code.fsproj", "{19258144-4099-49E8-ADF7-C9B88F3DFE48}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "BasicParser", "BasicParser\code.fsproj", "{19258144-4099-49E8-ADF7-C9B88F3DFE48}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "tests", "tests\tests.fsproj", "{AD6D752E-B8DC-4A84-B9BE-6201F0641FE4}"
 EndProject
