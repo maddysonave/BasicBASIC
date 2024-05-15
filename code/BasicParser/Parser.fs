@@ -9,15 +9,15 @@ type Expr =
 | Num of int
 | Bbool of bool
 // Arithmetic operators
-| Print of Expr
 | Plus of Expr * Expr
 | Minus of Expr * Expr
 | Times of Expr * Expr
 | Divide of Expr * Expr
 | Exp of Expr * Expr  // for exponentiation
-| Paren of Expr       // for expressions within parentheses
 // Other things 
 | Var of string
+| Print of Expr
+| Paren of Expr       // for expressions within parentheses
 
 // type IfExpr = 
 // | If of Expr * Expr * Expr
@@ -26,6 +26,8 @@ type Expr =
 
 // type ForLoop = 
 // | ForNext of string * Expr * Expr * Expr * Expr
+
+// also want to add a declaration parser 
 
 (* END AST DEFINITION *)
 
@@ -74,7 +76,14 @@ let pbstring =
 // Parsing a varible
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// REFERENCE CODE
 
+// let pVar : Parser<Expr> =
+//     pstring "var" |> pbind (fun varName ->
+//         pmany0 (pletter <|> pdigit) |>> (fun restChars ->
+//             Var (varName + String(restChars |> List.toArray))
+//         )
+//     )
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Loops, Conditionals, Functions
