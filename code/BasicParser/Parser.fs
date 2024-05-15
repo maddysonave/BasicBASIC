@@ -1,26 +1,47 @@
 module Parser
 open Combinator
 
+
 (* START AST DEFINITION *)
 type Expr =
+// Primitives
 | Bstring of string
-| Print of Expr
 | Num of int
+| Bbool of bool
+// Arithmetic operators
+| Print of Expr
 | Plus of Expr * Expr
 | Minus of Expr * Expr
 | Times of Expr * Expr
 | Divide of Expr * Expr
 | Exp of Expr * Expr  // for exponentiation
 | Paren of Expr       // for expressions within parentheses
+// Other things 
+| Var of string
+
+// type IfExpr = 
+// | If of Expr * Expr * Expr
+// | True
+// | False
+
+// type ForLoop = 
+// | ForNext of string * Expr * Expr * Expr * Expr
 
 (* END AST DEFINITION *)
 
-(* START PARSER DEFINITION *)
 
+(* START PARSER DEFINITION *)
 // recursive parsers for different levels of precedence
 let expr, exprImpl = recparser()
 let factorExpr, factorExprImpl = recparser()
 let expExpr, expExprImpl = recparser()
+
+// insert parser for if then loop
+// insert parser for for next loop
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Primitives
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // parser for numbers
 let num = 
@@ -44,6 +65,21 @@ let inside2 = (pmany1 inside) |>> stringBuilder
 let pbstring = 
     pbetween (pchar '"') (inside2) (pchar '"') |>> (fun s -> Bstring(s))
 
+// boolean parser
+// let pbbool : Parser<Expr> =
+//     (pstr "true" |>> (fun _ -> Bbool true))
+//     <|> (pstr "false" |>> (fun _ -> Bbool false))
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Parsing a varible
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Loops, Conditionals, Functions
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // parser for print statements
 let pbprint =
     pright (pstr "PRINT ") (expr) |>> (fun e -> Print(e))
@@ -54,6 +90,11 @@ let atom =
     pbstring <|> 
     pbprint <|>
     (pbetween (pleft (pchar '(') pws0) expr (pright pws0 (pchar ')')) |>> Paren)
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Arithmetic Operations
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // exponentiation parser: highest precedence, right associative
 let exponentiationExpr =
@@ -104,6 +145,12 @@ let addSubExpr =
             ) e1 ops
         )
 exprImpl := addSubExpr
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Data structures
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 // parser entry point: ensures entire input is consumed
 let grammar = pleft expr peof
