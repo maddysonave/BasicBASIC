@@ -2,6 +2,7 @@
 open Evaluator
 open Combinator
 open System.IO
+open System.Collections.Generic
 
 let readLinesFromFile path = File.ReadAllLines(path)
 
@@ -12,11 +13,15 @@ let main args =
         printfn "Usage: dotnet run <filename.txt>"
         1
     else
-        let file = readLinesFromFile args[0]
-        // for specification 1.0, the language only accepts 1 line at a time
-        let input = file[0]
+        let file = readLinesFromFile args.[0]
+        // concatenate all lines to form the input for the parser
+        let input = String.concat "\n" file
         let asto = parse input
         match asto with
-        | Some ast -> evaluate ast|> ignore
-        | None -> printfn "Invalid program."
-        0
+        | Some ast -> 
+            let env = Dictionary<string, int>()  // create a new environment
+            evaluate env ast |> ignore
+            0
+        | None -> 
+            printfn "Invalid program."
+            1

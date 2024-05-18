@@ -13,7 +13,6 @@ type TestClass () =
     [<TestMethod>]
       member this.TestAddition() =
         let result = parse "2 + 3"
-        printfn "%A" result
         let expected = 5
         match result with
         | Some (Plus (Num(a), Num(b))) -> Assert.AreEqual(expected, (a+b))
