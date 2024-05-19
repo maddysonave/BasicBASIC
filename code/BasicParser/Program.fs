@@ -19,7 +19,7 @@ let main args =
         let asto = parse input
         match asto with
         | Some ast -> 
-            let env = Dictionary<string, int>()  // create a new environment
+            let env = Dictionary<string, Value>()  // create a new environment
             evaluate env ast |> ignore
             0
         | None -> 

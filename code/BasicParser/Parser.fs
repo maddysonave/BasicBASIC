@@ -21,7 +21,7 @@ type Expr =
     | Assignment of string * Expr
     // Statement list to handle multiple lines
     | Statements of Expr list
-    // Conditional statements
+    // Conditionals
     | IfThen of Expr * Expr
     | IfThenElse of Expr * Expr * Expr
 
@@ -60,14 +60,6 @@ let pbstring =
     pbetween (pchar '"') (inside2) (pchar '"') |>> (fun s -> Bstring(s))
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Parsing booleans
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-let ptrue = pstr "true" |>> (fun _ -> Bbool true)
-let pfalse = pstr "false" |>> (fun _ -> Bbool false)
-let pbool = ptrue <|> pfalse
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Parsing a variable
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -84,46 +76,48 @@ let assignment =
         (fun (Var v, e) -> Assignment (v, e))
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Parsing conditionals
+/// Loops, Conditionals, Functions
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-let ifThen =
-    pright (pstr "IF") (
-        pseq expr (
-            pright pws0 (
-                pseq (pstr "THEN") expr (fun (_, e2) -> e2)
-            )
-        ) (fun (cond, thenExpr) -> IfThen (cond, thenExpr))
-    )
-    
-let ifThenElse =
-    pright (pstr "IF") (
-        pseq expr (
-            pright pws0 (
-                pright (pstr "THEN") (
-                    pseq expr (
-                        pright pws0 (
-                            pright (pstr "ELSE") expr
-                        )
-                    ) (fun (thenExpr, elseExpr) -> (thenExpr, elseExpr))
-                )
-            )
-        ) (fun (cond, (thenExpr, elseExpr)) -> IfThenElse (cond, thenExpr, elseExpr))
-    )
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Basic expression parser: numbers, strings, print statements, booleans, and parentheses
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 // parser for print statements
 let pbprint =
     pright (pstr "PRINT ") (expr) |>> (fun e -> Print(e))
 
+// parser for boolean values
+let pbool = 
+    (pstr "true" |>> (fun _ -> Bbool true)) <|> 
+    (pstr "false" |>> (fun _ -> Bbool false))
+
+// parser for if-then statements
+let ifThen =
+    pright (pright pws0 (pstr "IF")) (
+        pseq expr (
+            pright pws0 (
+                pseq (pright pws0 (pstr "THEN")) expr (fun (_, e2) -> e2)
+            )
+        ) (fun (cond, thenExpr) -> IfThen (cond, thenExpr))
+    )
+
+// parser for if-then-else statements
+// let ifThenElse =
+//     pright (pright pws0 (pstr "IF")) (
+//         pseq expr (
+//             pright pws0 (
+//                 pright (pstr "THEN") (
+//                     pseq expr (
+//                         pright pws0 (
+//                             pright (pstr "ELSE") expr
+//                         ) (fun (e3) -> e3)
+//                     ) (fun (e2, e3) -> (e2, e3))
+//                 )
+//             )
+//         ) (fun (cond, (thenExpr, elseExpr)) -> IfThenElse (cond, thenExpr, elseExpr))
+//     )
+
+// basic expression: numbers, strings, print statements, booleans, and parentheses
 let atom =
     num <|> 
     pbstring <|> 
-    pbprint <|> 
+    pbprint <|>
     pbool <|>
     (pbetween (pleft (pchar '(') pws0) expr (pright pws0 (pchar ')')) |>> Paren) <|>
     pvar
@@ -141,7 +135,7 @@ let exponentiationExpr =
     ))
         (fun (e1, ops) ->
             List.foldBack (fun (op, e2) acc ->
-                Exp(acc, e2)  // construct the expression with right associativity
+                Exp(e1, acc)  // construct the expression with right associativity
             ) ops e1
         )
 expExprImpl := exponentiationExpr <|> atom
@@ -175,20 +169,20 @@ let addSubExpr =
         (fun (e1, ops) ->
             List.fold (fun acc (op, e2) ->
                 match op with
-                | '+' -> Plus(acc, e2)  // add the new expression to the accumulator
+                | '+' -> Plus(acc, e2)  // add the accumulator to the new expression
                 | '-' -> Minus(acc, e2)  // subtract the new expression from the accumulator
                 | _ -> failwith "Unexpected operator"
             ) e1 ops
         )
-exprImpl := addSubExpr <|> factorExpr
+exprImpl := addSubExpr
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Parsing Statements
+/// Multi-Line Support
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// statement parser: can be a single expression or multiple expressions separated by semicolons
+// Parsing a single line (expression or assignment or conditionals)
 let line : Parser<Expr> =
-    ifThenElse <|> ifThen <|> assignment <|> expr
+    ifThen <|> assignment  <|> expr //ifThenElse <|>
 
 // Parsing multiple lines
 let lines : Parser<Expr list> =

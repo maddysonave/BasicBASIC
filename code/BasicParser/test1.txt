@@ -1,4 +1,3 @@
 a = true
-b = false
-PRINT a
-PRINT b
+IF a THEN PRINT "Condition is true"
+
