@@ -65,26 +65,27 @@ let rec evaluate (env: Environment) (e: Expr) : string =
     | Statements(stmts) ->
         let results = List.map (evaluate env) stmts
         List.last results
-    | IfThen(cond, thenExpr) ->
-        let condValue = 
-            match evaluate env cond with
-            | "true" -> true
-            | "false" -> false
-            | _ -> failwith "Invalid boolean value"
-        if condValue then
-            evaluate env thenExpr
-        else
-            ""
-    | IfThenElse(cond, thenExpr, elseExpr) ->
-        let condValue = 
-            match evaluate env cond with
-            | "true" -> true
-            | "false" -> false
-            | _ -> failwith "Invalid boolean value"
-        if condValue then
-            evaluate env thenExpr
-        else
-            evaluate env elseExpr
+    | Keyword(k) -> 
+    // | IfThen(cond, thenExpr) ->
+    //     let condValue = 
+    //         match evaluate env cond with
+    //         | "true" -> true
+    //         | "false" -> false
+    //         | _ -> failwith "Invalid boolean value"
+    //     if condValue then
+    //         evaluate env thenExpr
+    //     else
+    //         ""
+    // | IfThenElse(cond, thenExpr, elseExpr) ->
+    //     let condValue = 
+    //         match evaluate env cond with
+    //         | "true" -> true
+    //         | "false" -> false
+    //         | _ -> failwith "Invalid boolean value"
+    //     if condValue then
+    //         evaluate env thenExpr
+    //     else
+    //         evaluate env elseExpr
 
 let evaluateProgram (e: Expr) : string =
     let env = Environment()

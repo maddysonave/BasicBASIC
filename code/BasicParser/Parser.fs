@@ -15,6 +15,7 @@ type Expr =
     | Exp of Expr * Expr  // for exponentiation
     // Other things 
     | Var of string
+    | Keyword of string
     | Print of Expr
     | Paren of Expr       // for expressions within parentheses
     // Variable assignment
@@ -60,12 +61,13 @@ let pbstring =
     pbetween (pchar '"') (inside2) (pchar '"') |>> (fun s -> Bstring(s))
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Parsing a variable
+// Parsing a variable vs. keywords
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 let pvar =
     pseq pletter (pmany0 (pletter <|> pdigit))
         (fun (c, cs) -> Var (string c + stringify cs))
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Parsing a variable assignment
@@ -87,17 +89,18 @@ let pbool =
     (pstr "true" |>> (fun _ -> Bbool true)) <|> 
     (pstr "false" |>> (fun _ -> Bbool false))
 
-// parser for if-then statements
-let ifThen =
-    pright (pright pws0 (pstr "IF")) (
-        pseq expr (
-            pright pws0 (
-                pseq (pright pws0 (pstr "THEN")) expr (fun (_, e2) -> e2)
-            )
-        ) (fun (cond, thenExpr) -> IfThen (cond, thenExpr))
-    )
+let pkeyword (keyword: string) =
+    pleft (pstr keyword) pws0
 
-// parser for if-then-else statements
+let pif = pkeyword "IF"
+let pthen = pkeyword "THEN"
+let pelse = pkeyword "ELSE"
+let pgoto = pkeyword "GO TO"
+ 
+let keywords = pif <|> pthen <|> pelse <|> pgoto
+
+let keywordExpr = keywords |>> Keyword
+
 // let ifThenElse =
 //     pright (pright pws0 (pstr "IF")) (
 //         pseq expr (
@@ -182,7 +185,7 @@ exprImpl := addSubExpr
 
 // Parsing a single line (expression or assignment or conditionals)
 let line : Parser<Expr> =
-    ifThen <|> assignment  <|> expr //ifThenElse <|>
+    keywordExpr <|> assignment  <|> expr //ifThenElse <|>
 
 // Parsing multiple lines
 let lines : Parser<Expr list> =
