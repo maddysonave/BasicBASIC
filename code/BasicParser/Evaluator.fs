@@ -11,6 +11,7 @@ type Value =
 
 type Environment = Dictionary<string, Value>
 
+
 let rec evaluate (env: Environment) (e: Expr) : string =
     match e with
     | Bstring(s) -> s
@@ -65,17 +66,19 @@ let rec evaluate (env: Environment) (e: Expr) : string =
     | Statements(stmts) ->
         let results = List.map (evaluate env) stmts
         List.last results
-    | Keyword(k) -> 
-    // | IfThen(cond, thenExpr) ->
-    //     let condValue = 
-    //         match evaluate env cond with
-    //         | "true" -> true
-    //         | "false" -> false
-    //         | _ -> failwith "Invalid boolean value"
-    //     if condValue then
-    //         evaluate env thenExpr
-    //     else
-    //         ""
+    | IfThen (cond, thenExpr) ->
+        match cond with
+        | Bbool true -> evaluate env thenExpr
+        | Bbool false -> ""
+    | IfThenElse (cond, thenExpr, elseExpr) ->
+        let condValue =
+            match evaluate env cond with
+            | true -> Bbool true
+            | false -> Bbool false
+        if condValue then
+            evaluate env thenExpr
+        else
+            evaluate env elseExpr
     // | IfThenElse(cond, thenExpr, elseExpr) ->
     //     let condValue = 
     //         match evaluate env cond with
@@ -86,6 +89,7 @@ let rec evaluate (env: Environment) (e: Expr) : string =
     //         evaluate env thenExpr
     //     else
     //         evaluate env elseExpr
+
 
 let evaluateProgram (e: Expr) : string =
     let env = Environment()

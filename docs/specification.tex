@@ -165,9 +165,15 @@ easy to learn and program with. All types be it primitives or combining forms sh
     \hline
     Syntax& Abstract Syntax& Type& Prec./Assoc.& Meaning \\
     \hline
-    "Hello World" &Bstring of string &string &n/a & A sequence of characters enclosed in double quotes ("). It is a primitive \\
+    "s" &Bstring of string &string &n/a & A sequence of characters enclosed in double quotes ("). It is a primitive \\
     \hline
     n &Num of int &int &n/a &N is any positive or negative integer. It is a primitive. \\
+    \hline
+    x &Var of string &int &n/a &N is any positive or negative integer. It is a primitive. \\
+    \hline
+    = &Assignment of &int &n/a &N is any positive or negative integer. It is a primitive. \\
+    \hline
+    true/false &Bbool of bool &string &n/a & A sequence of characters enclosed in double quotes ("). It is a primitive \\
     \hline
     + &Plus of Expr * Expr &char &left-associative & Adds the value of the left expression to the value of the right expression.\\
     \hline
@@ -181,6 +187,13 @@ easy to learn and program with. All types be it primitives or combining forms sh
     \hline
     $()$ &Parens of Expr &char &n/a & parentheses\\
     \hline
+    GO TO &Divide of Expr * Expr &char &left-associative & Divides the value of the left expression by the value of the right expression.\\
+    \hline
+    IF THEN &Divide of Expr * Expr &char &left-associative & Divides the value of the left expression by the value of the right expression.\\
+    \hline
+    IF THEN ELSE &Divide of Expr * Expr &char &left-associative & Divides the value of the left expression by the value of the right expression.\\
+    \hline
+    GO TO &Divide of Expr * Expr &char &left-associative & Divides the value of the left expression by the value of the right expression.\\
     \end{tabular}
 \\
 
@@ -225,6 +238,8 @@ easy to learn and program with. All types be it primitives or combining forms sh
     \end{enumerate}
 \end{enumerate}
 
+\subsection*{Remaining Work}
+In the future, it would be nice to implement graphics into BASIC 
 
 % DO NOT DELETE ANYTHING BELOW THIS LINE
 \end{document}

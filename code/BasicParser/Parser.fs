@@ -10,12 +10,12 @@ type Expr =
     // Arithmetic operators
     | Plus of Expr * Expr
     | Minus of Expr * Expr
+    
     | Times of Expr * Expr
     | Divide of Expr * Expr
     | Exp of Expr * Expr  // for exponentiation
     // Other things 
     | Var of string
-    | Keyword of string
     | Print of Expr
     | Paren of Expr       // for expressions within parentheses
     // Variable assignment
@@ -23,8 +23,8 @@ type Expr =
     // Statement list to handle multiple lines
     | Statements of Expr list
     // Conditionals
-    | IfThen of Expr * Expr
-    | IfThenElse of Expr * Expr * Expr
+    | IfThen of bool * Expr
+    | IfThenElse of bool * Expr * Expr
 
 (* END AST DEFINITION *)
 
@@ -89,17 +89,18 @@ let pbool =
     (pstr "true" |>> (fun _ -> Bbool true)) <|> 
     (pstr "false" |>> (fun _ -> Bbool false))
 
-let pkeyword (keyword: string) =
-    pleft (pstr keyword) pws0
+let pif = pstr "IF"
+let pthen = pstr "THEN"
+let pelse = pstr "ELSE"
+let pgoto = pstr "GO TO"
 
-let pif = pkeyword "IF"
-let pthen = pkeyword "THEN"
-let pelse = pkeyword "ELSE"
-let pgoto = pkeyword "GO TO"
- 
-let keywords = pif <|> pthen <|> pelse <|> pgoto
+let pIfThenExpr =
+   pright pif (pleft pbool (pright pthen pbool))
 
-let keywordExpr = keywords |>> Keyword
+let pIfThenElseExpr =
+   pright pif (pleft pbool (pright pthen (pleft pbool pelse)))
+
+// let keywordExpr = pifThenExpr
 
 // let ifThenElse =
 //     pright (pright pws0 (pstr "IF")) (
@@ -185,7 +186,7 @@ exprImpl := addSubExpr
 
 // Parsing a single line (expression or assignment or conditionals)
 let line : Parser<Expr> =
-    keywordExpr <|> assignment  <|> expr //ifThenElse <|>
+    assignment  <|> expr //ifThenElse <|>
 
 // Parsing multiple lines
 let lines : Parser<Expr list> =
