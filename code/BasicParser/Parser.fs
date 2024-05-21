@@ -2,8 +2,6 @@ module Parser
 open Combinator
 
 (* START AST DEFINITION *)
-
-
 type Expr =
     // Primitives
     | Bstring of string
@@ -15,13 +13,6 @@ type Expr =
     | Times of Expr * Expr
     | Divide of Expr * Expr
     | Exp of Expr * Expr  // for exponentiation
-    // Comparison operators
-    | EqualEqual of Expr * Expr
-    | NotEqual of Expr * Expr
-    | LessThan of Expr * Expr
-    | LessThanOrEqual of Expr * Expr
-    | GreaterThan of Expr * Expr
-    | GreaterThanOrEqual of Expr * Expr
     // Other things 
     | Var of string
     | Print of Expr
@@ -32,13 +23,11 @@ type Expr =
     | Statements of Expr list
     // Conditionals
     | IfThen of Expr * Expr
-    | GOTO of Expr * Expr 
+    | IfThenElse of Expr * Expr * Expr
+
 (* END AST DEFINITION *)
 
-
 (* START PARSER DEFINITION *)
-let keyword = [ "PRINT"; "IF"; "THEN"; "GO TO"]
-
 // recursive parsers for different levels of precedence
 let expr, exprImpl = recparser()
 let factorExpr, factorExprImpl = recparser()
@@ -71,25 +60,24 @@ let pbstring =
     pbetween (pchar '"') (inside2) (pchar '"') |>> (fun s -> Bstring(s))
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Parsing a variable and others 
+// Parsing a variable
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-let pvarchar = pletter  <!> "pvarchar"
+let pvar =
+    pseq pletter (pmany0 (pletter <|> pdigit))
+        (fun (c, cs) -> Var (string c + stringify cs))
 
-let pvar: Parser<Expr> =    
-    pseq pletter (pmany0 pvarchar |>> stringify)
-        (fun (c: char, s: string) -> (string c) + s)
-        |>> (fun v ->
-                if List.contains v keyword then
-                    failwith ("'" + v + "' is a keyword.")
-                else
-                    Var v
-            ) <!> "pvar"
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Parsing a variable assignment
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// parser for variable assignment
 let assignment =
     pseq pvar (pright (pright pws0 (pchar '=')) (pright pws0 expr))
         (fun (Var v, e) -> Assignment (v, e))
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Loops, Conditionals, Functions
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // parser for print statements
 let pbprint =
@@ -100,23 +88,34 @@ let pbool =
     (pstr "true" |>> (fun _ -> Bbool true)) <|> 
     (pstr "false" |>> (fun _ -> Bbool false))
 
+// parser for if-then statements
+let ifThen =
+    pright (pright pws0 (pstr "IF")) (
+        pseq expr (
+            pright pws0 (
+                pseq (pright pws0 (pstr "THEN")) expr (fun (_, e2) -> e2)
+            )
+        ) (fun (cond, thenExpr) -> IfThen (cond, thenExpr))
+    )
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Comparison Operators
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// parser for if-then-else statements
 
-let comparisonOperatorParser : Parser<Expr -> Expr -> Expr>=
-    pstr "==" |>> fun _ -> EqualEqual 
-    <|> pstr "!=" |>> fun _ -> NotEqual 
-    <|> pstr "<=" |>> fun _ -> LessThanOrEqual
-    <|> pstr ">=" |>> fun _ -> GreaterThanOrEqual
-    <|> pstr "<"  |>> fun _ -> LessThan
-    <|> pstr ">"  |>> fun _ -> GreaterThan
-    
+// TODO: fix this and make sure conditionals get parsed before variables
+// let ifThenElse =
+//     pright (pright pws0 (pstr "IF")) (
+//         pseq expr (
+//             pright pws0 (
+//                 pright (pstr "THEN") (
+//                     pseq expr (
+//                         pright pws0 (
+//                             pright (pstr "ELSE") expr
+//                         ) (fun (e3) -> e3)
+//                     ) (fun (e2, e3) -> (e2, e3))
+//                 )
+//             )
+//         ) (fun (cond, (thenExpr, elseExpr)) -> IfThenElse (cond, thenExpr, elseExpr))
+//     )
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Arithmetic Operations
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // basic expression: numbers, strings, print statements, booleans, and parentheses
 let atom =
     num <|> 
@@ -125,6 +124,10 @@ let atom =
     pbool <|>
     (pbetween (pleft (pchar '(') pws0) expr (pright pws0 (pchar ')')) |>> Paren) <|>
     pvar
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Arithmetic Operations
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // exponentiation parser: highest precedence, right associative
 let exponentiationExpr =
@@ -176,21 +179,13 @@ let addSubExpr =
         )
 exprImpl := addSubExpr
 
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Multi-Line Support
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-let lineNumber =
-    pleft (pmany1 pdigit |>> (fun ds -> 
-        let s = stringify ds
-        let n = int s
-        Num(n))) pws1
-
 // Parsing a single line (expression or assignment or conditionals)
 let line : Parser<Expr> =
-    lineNumber <|> assignment <|> expr //ifThenElse <|>
+    ifThen <|> assignment <|> expr  //<|> ifThenElse
 
 // Parsing multiple lines
 let lines : Parser<Expr list> =
@@ -199,21 +194,6 @@ let lines : Parser<Expr list> =
 // Combining into a single program (statements)
 let program : Parser<Expr> =
     lines |>> Statements
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Conditionals
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// Parser for GOTO statement
-let goto =
-    pright (pleft (pstr "GO TO") pws0) lineNumber 
-
-// Define the IF...THEN...GOTO parser
-let ifThen =
-    (pright (pleft (pstr "IF") pws0) (pleft expr (pright (pleft (pstr "THEN") pws0) (pleft lineNumber pws0))))
-    |>> (fun (condition, lineNumber) -> IfThen (condition, lineNumber))
-
 
 // parser entry point: ensures entire input is consumed
 let grammar = pleft program peof

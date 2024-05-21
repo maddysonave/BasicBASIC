@@ -70,25 +70,25 @@ let rec evaluate (env: Environment) (e: Expr) : string =
         match cond with
         | Bbool true -> evaluate env thenExpr
         | Bbool false -> ""
-    | IfThenElse (cond, thenExpr, elseExpr) ->
-        let condValue =
-            match evaluate env cond with
-            | true -> Bbool true
-            | false -> Bbool false
-        if condValue then
-            evaluate env thenExpr
-        else
-            evaluate env elseExpr
-    // | IfThenElse(cond, thenExpr, elseExpr) ->
-    //     let condValue = 
+    // | IfThenElse (cond, thenExpr, elseExpr) ->
+    //     let condValue =
     //         match evaluate env cond with
-    //         | "true" -> true
-    //         | "false" -> false
-    //         | _ -> failwith "Invalid boolean value"
+    //         | true -> Bbool true
+    //         | false -> Bbool false
     //     if condValue then
     //         evaluate env thenExpr
     //     else
     //         evaluate env elseExpr
+    | IfThenElse(cond, thenExpr, elseExpr) ->
+        let condValue = 
+            match evaluate env cond with
+            | "true" -> true
+            | "false" -> false
+            | _ -> failwith "Invalid boolean value"
+        if condValue then
+            evaluate env thenExpr
+        else
+            evaluate env elseExpr
 
 
 let evaluateProgram (e: Expr) : string =
