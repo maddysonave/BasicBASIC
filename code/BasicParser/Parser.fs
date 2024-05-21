@@ -54,7 +54,7 @@ let rec stringBuilder (sl: string list): string  =
     | [] -> ""
     | x::xs -> x + stringBuilder xs
 
-let inside2 = (pmany1 inside) |>> stringBuilder 
+let inside2 = (pmany1 inside) |>> stringBuilder       
 
 let pbstring = 
     pbetween (pchar '"') (inside2) (pchar '"') |>> (fun s -> Bstring(s))
