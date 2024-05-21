@@ -86,55 +86,65 @@ programming. BASIC Basic will lend itself nicely to other more complex languages
 \begin{enumerate}
    
     \item
-    test1.bbas:
+    test1.txt:
 
     \begin{verbatim}
-    10 PRINT 2^3 
-    20 PRINT "That was easy!"
-    30 PRINT
+    a = true
+    b = false 
+    IF b THEN PRINT "hello" ELSE PRINT "goodbye"
     \end{verbatim}
 
     Run ”dotnet run test1.txt” in the project file. The output should be the following:
 
     \begin{verbatim}
-    8
+    "goodbye"
     \end{verbatim}
 
     \item
-    test-2.bbas: Factorial without INPUT
+    test-2.txt:
     
     \begin{verbatim}    
-    LET num = 5
-    LET factorial = 1
-    FOR i = 1 TO num
-        LET factorial = factorial * i
-    NEXT i
-    PRINT "The factorial of "; num; " is: "; factorial  
+    a = 23
+    b = 2 ^ 3
+    c = 2 + 3
+    d = 2 - 3
+    e = 2 * 3
+    
+    PRINT a
+    PRINT b
+    PRINT c
+    PRINT d
+    PRINT e 
     \end{verbatim}
 
-    Run ”dotnet run test2.bbas” in the project file. \\
+    Run ”dotnet run test2.txt” in the project file. The output should be the following: \\
 
     \begin{verbatim}
-    "The factorial of 5 is 120"
+    23
+    8
+    5
+    -1
+    6
     \end{verbatim}
 
     \item
-    test-3.bbas: Factorial with INPUT
+    test-3.txt:
 
     \begin{verbatim}    
-    INPUT "Enter a number: ", num
-    LET factorial = 1
-    FOR i = 1 TO num
-        LET factorial = factorial * i
-    NEXT i
-    PRINT "The factorial of "; num; " is: "; factorial
+    PRINT "This program calculates the area of a rectangle."
+    length = 5
+    width = 3
+    IF length > 0 AND width > 0 THEN
+        area = length * width
+    PRINT "The area of the rectangle is: "; area
+    ELSE
+    PRINT "Error: Length and width must be positive numbers."
     \end{verbatim}
 
-    Run ”dotnet run test3.bbas” in the project file. The user will then be prompted for a number. \\
-    In this case assume they inputed 5 \\
+    Run ”dotnet run test3.txt” in the project file. The output should be the following: \\
 
     \begin{verbatim}
-    "The factorial of 5 is 120"
+    "The area of the rectangle is: 15"
     \end{verbatim}
 \end{enumerate}
 
@@ -148,7 +158,9 @@ combining forms. \\
 In Basic BASIC we also have conditionals and GO TO statements. Although GO TOs are technically considered bad practice when coding, 
 we chose to implement them because it is the most simplistic way of introducing control flow in programs. It allows the user to think 
 more like a computer, by stepping through a program the same way that a computer would, without any previous or advanced programming 
-knowledge. 
+knowledge.\\
+\\
+
 
 \subsection*{Formal Syntax}
 
@@ -166,10 +178,7 @@ knowledge.
 <Arithmetic>  ::= (<Expr> + <Expr>) | (<Expr> - <Expr>) | 
                   (<Expr> * <Expr>) | (<Expr> / <Expr>) | 
                   (<Expr> ^ <Expr>)
-<Comparison>  ::= (<Expr> == <Expr>) | (<Expr> != <Expr>) | 
-                  (<Expr> < <Expr>)  | (<Expr> <= <Expr>) | 
-                  (<Expr> > <Expr>)  | (<Expr> >= <Expr>)
-<Conditional> ::= IF <Comparison> THEN <Statement>
+<Conditional> ::= IF <Statement> THEN <Statement> ELSE <Statement>
 \end{verbatim}
 
 \subsection*{Semantics}
@@ -190,13 +199,7 @@ knowledge.
     \hline
     = &Assignment of string * Expr &char &n/a & Assigns the value of the right expression to the value of the left expression \\
     \hline
-    \begin{verbatim} ==, <, <=, >, >=, !=\end{verbatim}&EqualsEquals, Less, LessEqual, Greater, GreaterEqual of Expr * Expr &char &left &Compares the value of the right expression to the value of the left expression and returns a boolean. \\
-    \hline
     + &Plus of Expr * Expr &char &left-associative & Adds the value of the left expression to the value of the right expression.\\
-    \hline
-    \end{tabular}
-
-    \begin{tabular}{ |p{3cm}|p{3cm}|p{3cm}|p{3cm}|p{3cm}|  }
     \hline
     - &Minus of Expr * Expr &char &left-associative & Subtracts the value of the right expression from the value of the left expression.\\
     \hline
@@ -208,9 +211,9 @@ knowledge.
     \hline
     $()$ &Parens of Expr &char &n/a & parentheses\\
     \hline
-    GO TO &GoTo of Expr * Expr &string &n/a & Control flow statement that directs the flow of the program to a certain line number.\\
+    IF THEN &IfThen of Expr * Expr &string &n/a & Checks for a condition and then either returns a value or moves on to the next block of code.\\
     \hline
-    IF THEN &IfThen of Expr * Expr &string &n/a & An extension of a control statement. Operates similarly to a conditional move in C. Only if a certain condition is met, will the flow of the program change.\\
+    IF... THEN... ELSE&IfThenElse of Expr * Expr * Expr &string &n/a & Extension of If...Then. Checks for a condition and then either returns a value or moves on to the next block of code.\\
     \hline
     \end{tabular}
 \\
@@ -231,8 +234,7 @@ knowledge.
     \begin{enumerate}
         \item 
         The combining forms we have are your typical arithmetic operators like addition, subtratction,
-        multiplication, division, and exponentiation. We also have comparison operators like $==$, $<$, $<=$,
-        $>$, $>=$, and $!=$
+        multiplication, division, and exponentiation. 
     \end{enumerate} 
     \item 
     How is your program evaluated? In particular
@@ -241,7 +243,7 @@ knowledge.
         Do programs in your language read any input?
         \begin{enumerate}
             \item
-            Our language does take in user input. As of right now our program does not take in user input, but
+            As of right now our program does not take in user input, but
             at some point it is something that we would like to implement as we believe that it will make 
             programming with Basic BASIC more dynamic. 
         \end{enumerate}
@@ -259,18 +261,17 @@ knowledge.
 \end{enumerate}
 
 \subsection*{Remaining Work and Limitations}
-Unfortunately, we were not able to implenet conditionals by the final submission. On our first try, it kept trying 
-to parse "IF" as a variable. We were able to reconcile this with the addition of things called "keywords." Examples
-of keywords are: PRINT, GO TO, IF, and THEN, words that should not be allowed to be used as variable names as they 
-have other meanings and uses. However, after we got to this point, we realized that we also had to implement 
-comparison operations and then implement the parsing of those into our conditional statements. \\
+Unfortunately, in its current state Basic BASIC is rather limited in what it is able to accomplish. We were hoping to implement 
+GO TO statements that would establish control logic into our program, but due to some issues that we experienced while trying to
+implement conditionals we did not get a chance to move to GO TOs. Although it was not shown in our presentation, we were able to 
+parse line numbers successfully, but as line numbers only come in to play with GO TOs we also had to scrap the idea to focus on 
+conditionals. \\
 \\
-We would eventually like to implement conditionals as we do believe that it would enhance the capabilities of our 
-language, we just, unfortunately able to get to it during this iteration. \\
-\\
-In later versions of Basic BASIC we would also like to have an interpreter that would be able to handle programs like
-STM which is a memory game that was introduced in Games for TI-99/4A. To create an interpreter that would be able to 
-run the STM program, we would also need to implement FOR NEXT, which operates similarly to a for loop in python, CALL 
+The nearest reach goal for Basic BASIC, is to create a full BASIC interpreter with FOR... NEXT, GO TO, line numbers, END,
+reading input and all that was laid out in the original language. Once a full BASIC interpreter is implemented, it would be nice 
+to tinker with it, and make it more adaptable to modern day programmers. Since it's creation in 1964, BASIC has been pretty much 
+rendered as obsolete. It would be interesting if BASIC were able to be revived as perhaps an introduction to C programming, as 
+we have discovered, BASIC functions in a similar manner to C.
 
 
 % DO NOT DELETE ANYTHING BELOW THIS LINE

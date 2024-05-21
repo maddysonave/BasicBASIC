@@ -1,3 +1,4 @@
-a = true
-IF a THEN PRINT "Condition is true"
 
+a = true
+b = false 
+IF b THEN PRINT "hello" ELSE PRINT "goodbye"
