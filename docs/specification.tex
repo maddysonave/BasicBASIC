@@ -19,6 +19,7 @@
 \usepackage{enumitem}   
 \usepackage{fancyvrb}
 \usepackage{todonotes}
+\usepackage{longtable}
 
 % This will set LaTeX to look for figures in the same directory as the .tex file
 \graphicspath{.} % The dot means current directory.
@@ -88,10 +89,12 @@ programming. BASIC Basic will lend itself nicely to other more complex languages
     test1.bbas:
 
     \begin{verbatim}
-    PRINT 2^3 
+    10 PRINT 2^3 
+    20 PRINT "That was easy!"
+    30 PRINT
     \end{verbatim}
 
-    Run ”dotnet run test1.bbas” in the project file. The output should be the following:
+    Run ”dotnet run test1.txt” in the project file. The output should be the following:
 
     \begin{verbatim}
     8
@@ -137,24 +140,36 @@ programming. BASIC Basic will lend itself nicely to other more complex languages
 
 \subsection*{Language Concepts}
 
-In order to use BASIC Basic the user should have an understanding of basic $($haha$)$ math operations.They also need to have some an 
+In order to use BASIC Basic the user should have an understanding of basic $($haha$)$ math operations. They also need to have some an 
 understanding of strings and print statements. Strings are a primitive data type in this language meaning they cannot be broken down 
-into constiuent parts. The print statment as well as the arithmetic operators, on the other hand, are combining forms. \\
+into constiuent parts. The print statment as well as the arithmetic operators and comparison operations, on the other hand, are 
+combining forms. \\
 \\
-For this our rendition of Basic, we are opting to not use GO TO statements as this is is generally regarded as bad coding practicing. 
-However, as we proceed with BASIC Basic we we will incorporate loops and conditionals. Once again, the goal of Basic BASIC is to be 
-easy to learn and program with. All types be it primitives or combining forms should resemble plain English as much as possible. 
+In Basic BASIC we also have conditionals and GO TO statements. Although GO TOs are technically considered bad practice when coding, 
+we chose to implement them because it is the most simplistic way of introducing control flow in programs. It allows the user to think 
+more like a computer, by stepping through a program the same way that a computer would, without any previous or advanced programming 
+knowledge. 
 
 \subsection*{Formal Syntax}
 
 \begin{verbatim}
-<Expr>     := <Command>_<String> | <String> | <Num> |
-              (<Expr> + <Expr>) | (<Expr> - <Expr>) | 
-              (<Expr> * <Expr>) | (<Expr> / <Expr>) | 
-              (<Expr> ^ <Expr>) | \epsilon | <Paren>
-<Command>  := PRINT
-<String>   := ""
-<Num>      := n\in\Z
+<Expr>        ::= <Statement> 
+                | <Statement> <Expr>
+<Statement>   ::= <Assignment> | <PRINT> | <Conditional> | <Arithmetic> | <Comparison>  
+<Assignment>  ::= <Var> '=' <Primitive>
+<Var>         ::= [a-zA-Z]+
+<Primitive>   ::= <Bboolean> | <Bstring> | <Num>
+<Bboolean>    ::= True | False 
+<Bstring>     ::= " " 
+<Num>         ::= n\in\Z
+<PRINT>       ::= PRINT <Expr>
+<Arithmetic>  ::= (<Expr> + <Expr>) | (<Expr> - <Expr>) | 
+                  (<Expr> * <Expr>) | (<Expr> / <Expr>) | 
+                  (<Expr> ^ <Expr>)
+<Comparison>  ::= (<Expr> == <Expr>) | (<Expr> != <Expr>) | 
+                  (<Expr> < <Expr>)  | (<Expr> <= <Expr>) | 
+                  (<Expr> > <Expr>)  | (<Expr> >= <Expr>)
+<Conditional> ::= IF <Comparison> THEN <Statement>
 \end{verbatim}
 
 \subsection*{Semantics}
@@ -167,15 +182,21 @@ easy to learn and program with. All types be it primitives or combining forms sh
     \hline
     "s" &Bstring of string &string &n/a & A sequence of characters enclosed in double quotes ("). It is a primitive \\
     \hline
+    true/false &Bbool of bool &string &n/a & Truth values indicating whether the result of a comparitive operation is true or false. It is a primitive \\
+    \hline
     n &Num of int &int &n/a &N is any positive or negative integer. It is a primitive. \\
     \hline
     x &Var of string &int &n/a &N is any positive or negative integer. It is a primitive. \\
     \hline
-    = &Assignment of &int &n/a &N is any positive or negative integer. It is a primitive. \\
+    = &Assignment of string * Expr &char &n/a & Assigns the value of the right expression to the value of the left expression \\
     \hline
-    true/false &Bbool of bool &string &n/a & A sequence of characters enclosed in double quotes ("). It is a primitive \\
+    \begin{verbatim} ==, <, <=, >, >=, !=\end{verbatim}&EqualsEquals, Less, LessEqual, Greater, GreaterEqual of Expr * Expr &char &left &Compares the value of the right expression to the value of the left expression and returns a boolean. \\
     \hline
     + &Plus of Expr * Expr &char &left-associative & Adds the value of the left expression to the value of the right expression.\\
+    \hline
+    \end{tabular}
+
+    \begin{tabular}{ |p{3cm}|p{3cm}|p{3cm}|p{3cm}|p{3cm}|  }
     \hline
     - &Minus of Expr * Expr &char &left-associative & Subtracts the value of the right expression from the value of the left expression.\\
     \hline
@@ -187,13 +208,10 @@ easy to learn and program with. All types be it primitives or combining forms sh
     \hline
     $()$ &Parens of Expr &char &n/a & parentheses\\
     \hline
-    GO TO &Divide of Expr * Expr &char &left-associative & Divides the value of the left expression by the value of the right expression.\\
+    GO TO &GoTo of Expr * Expr &string &n/a & Control flow statement that directs the flow of the program to a certain line number.\\
     \hline
-    IF THEN &Divide of Expr * Expr &char &left-associative & Divides the value of the left expression by the value of the right expression.\\
+    IF THEN &IfThen of Expr * Expr &string &n/a & An extension of a control statement. Operates similarly to a conditional move in C. Only if a certain condition is met, will the flow of the program change.\\
     \hline
-    IF THEN ELSE &Divide of Expr * Expr &char &left-associative & Divides the value of the left expression by the value of the right expression.\\
-    \hline
-    GO TO &Divide of Expr * Expr &char &left-associative & Divides the value of the left expression by the value of the right expression.\\
     \end{tabular}
 \\
 
@@ -204,7 +222,7 @@ easy to learn and program with. All types be it primitives or combining forms sh
     in a program written in your language. 
     \begin{enumerate}
         \item
-        The primitives that we currently have are strings and numbers.
+        The primitives we have are strings, numbers, and booleans
     \end{enumerate} 
     \item 
     What are the combining forms in your language? In other words, how are values combined in
@@ -213,7 +231,8 @@ easy to learn and program with. All types be it primitives or combining forms sh
     \begin{enumerate}
         \item 
         The combining forms we have are your typical arithmetic operators like addition, subtratction,
-         * multiplication, division, and exponentiation.
+        multiplication, division, and exponentiation. We also have comparison operators like $==$, $<$, $<=$,
+        $>$, $>=$, and $!=$
     \end{enumerate} 
     \item 
     How is your program evaluated? In particular
@@ -222,8 +241,9 @@ easy to learn and program with. All types be it primitives or combining forms sh
         Do programs in your language read any input?
         \begin{enumerate}
             \item
-            Our language does take in user input. Our language is a way to simplify programming, 
-            so users will be programming using our language.
+            Our language does take in user input. As of right now our program does not take in user input, but
+            at some point it is something that we would like to implement as we believe that it will make 
+            programming with Basic BASIC more dynamic. 
         \end{enumerate}
         \item
         What is the effect (output) of evaluating a program? Does the language produce a file or
@@ -238,8 +258,20 @@ easy to learn and program with. All types be it primitives or combining forms sh
     \end{enumerate}
 \end{enumerate}
 
-\subsection*{Remaining Work}
-In the future, it would be nice to implement graphics into BASIC 
+\subsection*{Remaining Work and Limitations}
+Unfortunately, we were not able to implenet conditionals by the final submission. On our first try, it kept trying 
+to parse "IF" as a variable. We were able to reconcile this with the addition of things called "keywords." Examples
+of keywords are: PRINT, GO TO, IF, and THEN, words that should not be allowed to be used as variable names as they 
+have other meanings and uses. However, after we got to this point, we realized that we also had to implement 
+comparison operations and then implement the parsing of those into our conditional statements. \\
+\\
+We would eventually like to implement conditionals as we do believe that it would enhance the capabilities of our 
+language, we just, unfortunately able to get to it during this iteration. \\
+\\
+In later versions of Basic BASIC we would also like to have an interpreter that would be able to handle programs like
+STM which is a memory game that was introduced in Games for TI-99/4A. To create an interpreter that would be able to 
+run the STM program, we would also need to implement FOR NEXT, which operates similarly to a for loop in python, CALL 
+
 
 % DO NOT DELETE ANYTHING BELOW THIS LINE
 \end{document}
