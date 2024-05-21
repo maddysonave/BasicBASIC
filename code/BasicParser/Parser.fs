@@ -54,10 +54,55 @@ let rec stringBuilder (sl: string list): string  =
     | [] -> ""
     | x::xs -> x + stringBuilder xs
 
-let inside2 = (pmany1 inside) |>> stringBuilder       
+let inside2 = (pmany1 inside) |>> stringBuilder 
 
 let pbstring = 
     pbetween (pchar '"') (inside2) (pchar '"') |>> (fun s -> Bstring(s))
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Loops, Conditionals, Functions
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// parser for print statements
+let pbprint =
+    pright (pstr "PRINT ") (expr) |>> (fun e -> Print(e))
+
+// parser for boolean values
+let pbool = 
+    (pstr "true" |>> (fun _ -> Bbool true)) <|> 
+    (pstr "false" |>> (fun _ -> Bbool false))
+
+// parser for if-then statements
+// parser for if-then statements
+let ifThen =
+    pright pws0 (
+        pright (pstr "IF") (
+            pseq (pright pws1 expr) (
+                pright pws0 (
+                    pright (pstr "THEN") (
+                        pright pws0 expr
+                    )
+                )
+            ) (fun (cond, thenExpr) -> IfThen (cond, thenExpr))
+        )
+    )
+
+// parser for if-then-else statements
+
+//TODO: fix this and make sure conditionals get parsed before variables
+let ifThenElse =
+        pright pws0 (
+        pright (pstr "IF") (
+            pseq (pright pws1 expr) (
+                pseq (pright pws1 (
+                    pright (pstr "THEN") (
+                        pright pws1 expr
+                    )
+                )) (pright (pright pws1 (pstr "ELSE")) (pright pws1 expr)) (fun (thenExpr, elseExpr) -> (thenExpr, elseExpr))
+            ) (fun (cond, (thenExpr, elseExpr)) -> IfThenElse (cond, thenExpr, elseExpr))
+        )
+    )
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Parsing a variable
@@ -75,49 +120,11 @@ let assignment =
     pseq pvar (pright (pright pws0 (pchar '=')) (pright pws0 expr))
         (fun (Var v, e) -> Assignment (v, e))
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Loops, Conditionals, Functions
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// parser for print statements
-let pbprint =
-    pright (pstr "PRINT ") (expr) |>> (fun e -> Print(e))
-
-// parser for boolean values
-let pbool = 
-    (pstr "true" |>> (fun _ -> Bbool true)) <|> 
-    (pstr "false" |>> (fun _ -> Bbool false))
-
-// parser for if-then statements
-let ifThen =
-    pright (pright pws0 (pstr "IF")) (
-        pseq expr (
-            pright pws0 (
-                pseq (pright pws0 (pstr "THEN")) expr (fun (_, e2) -> e2)
-            )
-        ) (fun (cond, thenExpr) -> IfThen (cond, thenExpr))
-    )
-
-// parser for if-then-else statements
-
-// TODO: fix this and make sure conditionals get parsed before variables
-// let ifThenElse =
-//     pright (pright pws0 (pstr "IF")) (
-//         pseq expr (
-//             pright pws0 (
-//                 pright (pstr "THEN") (
-//                     pseq expr (
-//                         pright pws0 (
-//                             pright (pstr "ELSE") expr
-//                         ) (fun (e3) -> e3)
-//                     ) (fun (e2, e3) -> (e2, e3))
-//                 )
-//             )
-//         ) (fun (cond, (thenExpr, elseExpr)) -> IfThenElse (cond, thenExpr, elseExpr))
-//     )
 
 // basic expression: numbers, strings, print statements, booleans, and parentheses
 let atom =
+    ifThenElse <|> 
+    ifThen <|> 
     num <|> 
     pbstring <|> 
     pbprint <|>
@@ -185,7 +192,7 @@ exprImpl := addSubExpr
 
 // Parsing a single line (expression or assignment or conditionals)
 let line : Parser<Expr> =
-    ifThen <|> assignment <|> expr  //<|> ifThenElse
+    ifThenElse <|> ifThen <|> assignment  <|> expr  //
 
 // Parsing multiple lines
 let lines : Parser<Expr list> =

@@ -67,9 +67,20 @@ let rec evaluate (env: Environment) (e: Expr) : string =
         let results = List.map (evaluate env) stmts
         List.last results
     | IfThen (cond, thenExpr) ->
-        match cond with
-        | Bbool true -> evaluate env thenExpr
-        | Bbool false -> ""
+        let condValue = evaluate env cond
+        match System.Boolean.TryParse(condValue) with
+        | (true, true) -> evaluate env thenExpr
+        | (true, false) -> ""
+        | _ -> failwith "Condition must evaluate to a boolean value"
+    | IfThenElse (cond, thenExpr, elseExpr) ->
+        let condValue = evaluate env cond
+        match System.Boolean.TryParse(condValue) with
+        | (true, true) -> evaluate env thenExpr
+        | (true, false) -> evaluate env elseExpr
+        | _ -> failwith "Condition must evaluate to a boolean value"
+
+
+
     // | IfThenElse (cond, thenExpr, elseExpr) ->
     //     let condValue =
     //         match evaluate env cond with
@@ -79,16 +90,16 @@ let rec evaluate (env: Environment) (e: Expr) : string =
     //         evaluate env thenExpr
     //     else
     //         evaluate env elseExpr
-    | IfThenElse(cond, thenExpr, elseExpr) ->
-        let condValue = 
-            match evaluate env cond with
-            | "true" -> true
-            | "false" -> false
-            | _ -> failwith "Invalid boolean value"
-        if condValue then
-            evaluate env thenExpr
-        else
-            evaluate env elseExpr
+    // | IfThenElse(cond, thenExpr, elseExpr) ->
+    //     let condValue = 
+    //         match evaluate env cond with
+    //         | "true" -> true
+    //         | "false" -> false
+    //         | _ -> failwith "Invalid boolean value"
+    //     if condValue then
+    //         evaluate env thenExpr
+    //     else
+    //         evaluate env elseExpr
 
 
 let evaluateProgram (e: Expr) : string =

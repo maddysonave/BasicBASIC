@@ -1,3 +1,2 @@
-a = true
-IF a THEN PRINT "Condition is true"
+IF true THEN PRINT "hello"
 
