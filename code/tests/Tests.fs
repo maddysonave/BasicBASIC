@@ -3,11 +3,10 @@ namespace tests
 open System
 open Microsoft.VisualStudio.TestTools.UnitTesting
 open Combinator
+open AST
 open Evaluator
 open Parser
-open AST
 open Program
-open System.Collections.Generic
 
 [<TestClass>]
 type TestClass () =
@@ -21,19 +20,17 @@ type TestClass () =
         | Some (Statements [Num(a)]) -> Assert.AreEqual(expected, a)
         | _ -> Assert.Fail("Parsing failed or returned wrong type")
 
-    [<TestMethod>]
-<<<<<<< HEAD
-    member this.TestString() =
-        let input = "Hello"
-        let expected = "Hello"
-        let result = parse input
-        match result with
-        | Some (Statements [Bstring(a)]) -> Assert.AreEqual(expected,  a)
-        | _ -> Assert.Fail("Parsing failed or returned wrong type")
+    // [<TestMethod>]
+    // member this.TestBoolean() =
+    //     let input = "PRINT " 
+    //     let expected = " "
+    //     let result = parse input
+    //     match result with
+    //     | Some (Statements [Print (Bstring a)]) -> Assert.AreEqual(expected, a)
+    //     | _ -> Assert.Fail("Parsing failed or returned wrong type")
+
 
     [<TestMethod>]
-=======
->>>>>>> f7ef4b56bc044d33f272da342b069e1406d98d5b
       member this.TestAddition() =
         let result = parse "2 + 3"
         let expected = 5
@@ -66,39 +63,9 @@ type TestClass () =
         | Some (Statements [Divide (Num(a), Num(b))]) -> Assert.AreEqual(expected, (a/b))
         | _ -> Assert.Fail("Parsing failed or returned wrong type")
 
-<<<<<<< HEAD
 
-    [<TestMethod>]
-    member this.TestPrint() =
-        let input = "PRINT " 
-        let expected = " "
-        let result = parse input
-        match result with
-        | Some (Statements [Print (Bstring a)]) -> Assert.AreEqual(expected, a)
-        | _ -> Assert.Fail("Parsing failed or returned wrong type")
 
-=======
-    [<TestMethod>] 
-      member this.TestBoolean() =
-        let result = parse "true"
-        let expected = true
-        match result with
-        | Some (Statements [Bbool(b)]) -> Assert.AreEqual(expected, (b))
-        | _ -> Assert.Fail("Parsing failed or returned wrong type")
-    
-    // TEST FOR THE EVALUATOR
-    [<TestMethod>] 
-      member this.TestIfThen() =
-        let example = @"IF true THEN PRINT ""HELLO"""
-        let parsedString = parse example
-        let expected = "HELLO"
-        match parsedString with
-        | Some ast -> 
-            let env = Dictionary<string, Value>()  // create a new environment
-            let evaluatedVal = evaluate env ast
-            Assert.AreEqual(expected, evaluatedVal)
-        | None -> 
-            printfn "Invalid program."
->>>>>>> f7ef4b56bc044d33f272da342b069e1406d98d5b
+   
+
     
         

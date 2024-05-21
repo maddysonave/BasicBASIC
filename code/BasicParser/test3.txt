@@ -1,1 +1,10 @@
-"Programming is cool"
+l = 5
+w = 3
+a = l * w
+p = 2 * (l + w)
+
+PRINT "Rectangle Properties:"
+PRINT l
+PRINT w
+PRINT a 
+PRINT p

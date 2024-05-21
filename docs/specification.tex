@@ -131,20 +131,25 @@ programming. BASIC Basic will lend itself nicely to other more complex languages
     test-3.txt:
 
     \begin{verbatim}    
-    PRINT "This program calculates the area of a rectangle."
-    length = 5
-    width = 3
-    IF length > 0 AND width > 0 THEN
-        area = length * width
-    PRINT "The area of the rectangle is: "; area
-    ELSE
-    PRINT "Error: Length and width must be positive numbers."
+        l = 5
+        w = 3
+        a = l * w
+        p = 2 * (l + w)
+        
+        PRINT "Rectangle Properties:"
+        PRINT l
+        PRINT w
+        PRINT a 
+        PRINT p
     \end{verbatim}
 
     Run ”dotnet run test3.txt” in the project file. The output should be the following: \\
 
     \begin{verbatim}
-    "The area of the rectangle is: 15"
+    5
+    3
+    15
+    16
     \end{verbatim}
 \end{enumerate}
 
