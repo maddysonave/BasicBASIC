@@ -5,6 +5,7 @@ open Microsoft.VisualStudio.TestTools.UnitTesting
 open Combinator
 open Evaluator
 open Parser
+open AST
 open Program
 open System.Collections.Generic
 
@@ -60,7 +61,8 @@ type TestClass () =
         match result with
         | Some (Statements [Bbool(b)]) -> Assert.AreEqual(expected, (b))
         | _ -> Assert.Fail("Parsing failed or returned wrong type")
-
+    
+    // TEST FOR THE EVALUATOR
     [<TestMethod>] 
       member this.TestIfThen() =
         let example = @"IF true THEN PRINT ""HELLO"""
