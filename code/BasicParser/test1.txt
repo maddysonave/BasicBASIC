@@ -1,4 +1,2 @@
+IF true THEN PRINT "hello"
 
-a = true
-b = false 
-IF b THEN PRINT "hello" ELSE PRINT "goodbye"

@@ -1,5 +1,5 @@
 module Evaluator
-
+open AST
 open Parser
 open System.Collections.Generic
 
@@ -78,30 +78,6 @@ let rec evaluate (env: Environment) (e: Expr) : string =
         | (true, true) -> evaluate env thenExpr
         | (true, false) -> evaluate env elseExpr
         | _ -> failwith "Condition must evaluate to a boolean value"
-
-
-
-    // | IfThenElse (cond, thenExpr, elseExpr) ->
-    //     let condValue =
-    //         match evaluate env cond with
-    //         | true -> Bbool true
-    //         | false -> Bbool false
-    //     if condValue then
-    //         evaluate env thenExpr
-    //     else
-    //         evaluate env elseExpr
-    // | IfThenElse(cond, thenExpr, elseExpr) ->
-    //     let condValue = 
-    //         match evaluate env cond with
-    //         | "true" -> true
-    //         | "false" -> false
-    //         | _ -> failwith "Invalid boolean value"
-    //     if condValue then
-    //         evaluate env thenExpr
-    //     else
-    //         evaluate env elseExpr
-
-
 let evaluateProgram (e: Expr) : string =
     let env = Environment()
     evaluate env e
