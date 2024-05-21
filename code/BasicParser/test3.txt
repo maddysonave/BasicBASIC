@@ -3,7 +3,7 @@ w = 3
 a = 5 * 3
 p = 2 * (5 + 3)
 
-PRINT "Rectangle Properties:"
+PRINT "Rectangle Properties"
 PRINT l
 PRINT w
 PRINT a 
