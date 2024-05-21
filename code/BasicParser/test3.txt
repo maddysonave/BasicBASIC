@@ -1,7 +1,7 @@
 l = 5
 w = 3
-a = l * w
-p = 2 * (l + w)
+a = 5 * 3
+p = 2 * (5 + 3)
 
 PRINT "Rectangle Properties:"
 PRINT l
